@@ -1,0 +1,30 @@
+spring:
+  application:
+    name: gateway-service
+  cloud:
+    gateway:
+      routes:
+        - id: microsservice
+          uri: lb://MICROSSERVICE
+          filters:
+            - StripPrefix=1
+          predicates:
+            - Path=/microsservice/**
+
+server:
+  port: 9999
+eureka:
+  instance:
+    instance-id: ${spring.application.name}:${random.value}
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+
+springdoc:
+  swagger-ui:
+    path: /docs
+    urls:
+      - name: gateway-service
+        url: /v3/api-docs
+      - name: microsservice
+        url: /microsservice/v3/api-docs

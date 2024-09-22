@@ -1,0 +1,45 @@
+version: '3.9'
+services:
+  eureka-server:
+    image: eurekaserver
+    build:
+      context: ./eureka-server
+      dockerfile: Dockerfile
+    ports:
+      - "8761:8761"
+    networks:
+      - eureka-net
+
+  microsservice:
+    image: microsservice
+    build:
+      context: ./microsservice
+      dockerfile: Dockerfile
+    environment:
+      EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE: http://eureka-server:8761/eureka/
+    depends_on:
+      - eureka-server
+    networks:
+      - eureka-net
+    deploy:
+      replicas: 3
+
+  gateway:
+    image: gateway
+    build:
+      context: ./gateway-service
+      dockerfile: Dockerfile
+    environment:
+      EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE: http://eureka-server:8761/eureka/
+    depends_on:
+      - eureka-server
+      - microsservice
+    ports:
+      - "9999:9999"
+    networks:
+      - eureka-net
+    restart: unless-stopped
+
+networks:
+  eureka-net:
+    driver: bridge
