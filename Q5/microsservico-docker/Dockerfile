@@ -1,3 +1,4 @@
+# Usar a imagem base do Java
 FROM openjdk:17-jdk-slim
 
 WORKDIR /app

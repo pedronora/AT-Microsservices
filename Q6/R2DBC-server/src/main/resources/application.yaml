@@ -1,0 +1,20 @@
+spring:
+  application:
+    name: R2DBC-server
+
+  r2dbc:
+    url: r2dbc:h2:mem:///testdb
+    username: sa
+    password:
+
+  h2:
+    console:
+      enabled: true
+
+  sql:
+    init:
+      mode: always
+
+logging:
+  level:
+    org.springframework.r2dbc: DEBUG
